@@ -1,0 +1,21 @@
+{
+  "name": "deerhunterweb",
+  "version": "0.0.0",
+  "dependencies": {
+    "cheerio": "^0.18.0",
+    "express": "2.5.8",
+    "jade": "0.17.0",
+    "jsdom": "0.2.9",
+    "request": "2.2.0",
+    "stylus": "^0.50.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "grunt test",
+    "pree2e": "./node_modules/protractor/bin/webdriver-manager update",
+    "e2e": "grunt test:e2e"
+  }
+}

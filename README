@@ -1,0 +1,21 @@
+This is a cheerio test project (practise)
+
+This test project is made by following the video : http://vimeo.com/31950192
+
+Basic code is downloaded from here : http://code.tutsplus.com/tutorials/how-to-scrape-web-pages-with-node-js-and-jquery--net-22478
+
+However, they only supplied the source code without package.json file.
+
+This is project was created 4 years ago (2011), they used very old api. So I found the old version of packages and persisted them into the package.json.
+
+
+To run this project, you should run:
+
+```npm install
+
+then
+
+```node app.js
+
+
+
