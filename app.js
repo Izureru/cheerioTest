@@ -64,25 +64,46 @@ app.get('/nodetube', function(req, res) {
             //Use jQuery just as in any regular HTML page
             var $ = window.jQuery,
                 $body = $('body'),
-                $videos = $body.find('.video-entry');
+                $videos = $body.find('.yt-lockup-dismissable');
             //I know .video-entry elements contain the regular sized thumbnails
 
             //for each one of those elements found
             $videos.each(function(i, item) {
+                console.log("-------" + item);
                 //I will use regular jQuery selectors
-                var $a = $(item).children('a'),
-                    $title = $(item).find('.video-title .video-long-title').text(),
-                    $time = $a.find('.video-time').text(),
-                    $img = $a.find('span.clip img');
+                var $a = $(item).find('.yt-ui-ellipsis');
+                    $title = $a.text(),
+                    $time = $(item).find('.video-time').text(),
+                    $img = $(item).find('.video-thumb img');//.find('img');
+
+                // console.log("a-------" + $a);
+                // console.log("a href-------" + $a.attr('href'));
+                // console.dir($a);
                 //and add all that data to my items array
-                self.items[i] = {
-                    href: $a.attr('href'),
-                    title: $title.trim(),
-                    time: $time,
-                    thumbnail: $img.attr('data-thumb') ? $img.attr('data-thumb') : $img.attr('src'),
-                    urlObj: url.parse($a.attr('href'), true) //parse our URL and the query string as well
-                };
+                if ($a.attr('href') != undefined) {
+
+                    self.items[i] = {
+                        href: $a.attr('href'),
+                        title: $title.trim(),
+                        time: $time,
+                        thumbnail: $img.attr('data-thumb') ? $img.attr('data-thumb') : $img.attr('src'),
+                        urlObj: url.parse($a.attr('href'), true) //parse our URL and the query string as well
+                        // urlObj: url.parse('/watch?v=-DD_QUlrqGU', true) //parse our URL and the query string as well
+                    };
+
+                }
             });
+
+            // $videos.each(function(i, item) {
+            //     console.log("-------xxxxxxx videos");
+            //     // yt-lockup-content
+            //     $a = $(item).find('.yt-ui-ellipsis');
+            //     //var $a = $(item).children('a');
+            //     console.log("a-------" + $a.attr('href'));
+            //     console.dir($a.attr('href'));
+            // });
+            // console.log("---------------------------------");
+            // // console.dir($videos);
             console.log(self.items);
             //We have all we came for, now let's build our views
             res.render('list', {
