@@ -9,7 +9,6 @@ var express = require('express'),
     app = module.exports = express.createServer();
 
 // Configuration
-
 app.configure(function() {
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
@@ -34,91 +33,46 @@ app.configure('production', function() {
 });
 
 // Routes
-
 app.get('/', function(req, res) {
     res.render('index', {
         title: 'Express'
     });
 });
 
-app.get('/nodetube', function(req, res) {
-    //Tell the request that we want to fetch youtube.com, send the results to a callback function
+app.get('/immo', function(req, res) {
     request({
-        uri: 'https://www.youtube.com/'
+        uri: 'http://mangastream.com/'
     }, function(err, response, body) {
 
-        // console.log(body);
         var self = this;
-        self.items = new Array(); //I feel like I want to save my results in an array
-
-        //Just a basic error check
+        self.items = new Array(); 
         if (err && response.statusCode !== 200) {
             console.log('Request error.');
         }
-        //Send the body param as the HTML code we will parse in jsdom
-        //also tell jsdom to attach jQuery in the scripts
-        jsdom.env({
+            jsdom.env({
             html: body,
             scripts: ['http://code.jquery.com/jquery-1.6.min.js']
-        }, function(err, window) {
-            //Use jQuery just as in any regular HTML page
-            var $ = window.jQuery,
+            }, function(err, window) {
+                var $ = window.jQuery,
                 $body = $('body'),
-                $videos = $body.find('.yt-lockup-dismissable');
-            //I know .video-entry elements contain the regular sized thumbnails
-
-            //for each one of those elements found
-            $videos.each(function(i, item) {
-                console.log("-------" + item);
-                //I will use regular jQuery selectors
-                var $a = $(item).find('.yt-ui-ellipsis');
-                    $title = $a.text(),
-                    $time = $(item).find('.video-time').text(),
-                    $img = $(item).find('.video-thumb img');//.find('img');
-
-                // console.log("a-------" + $a);
-                // console.log("a href-------" + $a.attr('href'));
-                // console.dir($a);
-                //and add all that data to my items array
-                if ($a.attr('href') != undefined) {
-
-                    self.items[i] = {
-                        href: $a.attr('href'),
-                        title: $title.trim(),
-                        time: $time,
-                        thumbnail: $img.attr('data-thumb') ? $img.attr('data-thumb') : $img.attr('src'),
-                        urlObj: url.parse($a.attr('href'), true) //parse our URL and the query string as well
-                        // urlObj: url.parse('/watch?v=-DD_QUlrqGU', true) //parse our URL and the query string as well
-                    };
-
-                }
+                $mangas = $body.find('.active');
+           
+                $mangas.each(function(i, item) {
+                    var $a = $(item).find('a');
+                    $title = $a.text();
+                    var indextemp = $title.indexOf("One Piece");
+                    if (indextemp != -1) {
+                    console.log("a-------" + $a);
+                    console.log("title-------" + $title);
+                };
             });
 
-            // $videos.each(function(i, item) {
-            //     console.log("-------xxxxxxx videos");
-            //     // yt-lockup-content
-            //     $a = $(item).find('.yt-ui-ellipsis');
-            //     //var $a = $(item).children('a');
-            //     console.log("a-------" + $a.attr('href'));
-            //     console.dir($a.attr('href'));
-            // });
-            // console.log("---------------------------------");
-            // // console.dir($videos);
             console.log(self.items);
-            //We have all we came for, now let's build our views
             res.render('list', {
-                title: 'NodeTube',
+                title: 'Is My Manga Out',
                 items: self.items
             });
         });
-    });
-});
-
-//Pass the video id to the video view
-app.get('/watch/:id', function(req, res) {
-    res.render('video', {
-        title: 'Watch',
-        vid: req.params.id
     });
 });
 
